@@ -1,17 +1,9 @@
-name: Node.js CI + Docker Build
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v3
 
     - name: Set up Node.js
@@ -37,6 +29,7 @@ jobs:
     - name: Build Docker image
       run: docker build -t calculator-api .
 
-    - name: Push Docker image (optional)
-      run: docker tag calculator-api ${{ secrets.DOCKER_USERNAME }}/calculator-api:latest && \
-           docker push ${{ secrets.DOCKER_USERNAME }}/calculator-api:latest
+    - name: Tag and Push Docker image
+      run: |
+        docker tag calculator-api ${{ secrets.DOCKER_USERNAME }}/calculator-api:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/calculator-api:latest
